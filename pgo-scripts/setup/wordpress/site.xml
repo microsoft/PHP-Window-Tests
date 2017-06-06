@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appcmd>
+    <SITE SITE.NAME="wordpress" SITE.ID="7" bindings="http/*:80:wordpress" state="Started">
+        <site name="wordpress" id="7">
+            <bindings>
+                <binding protocol="http" bindingInformation="*:80:wordpress" />
+            </bindings>
+            <limits />
+            <logFile />
+            <traceFailedRequestsLogging />
+            <applicationDefaults />
+            <virtualDirectoryDefaults />
+            <ftpServer>
+                <connections />
+                <security>
+                    <dataChannelSecurity />
+                    <commandFiltering>
+                    </commandFiltering>
+                    <ssl />
+                    <sslClientCertificates />
+                    <authentication>
+                        <anonymousAuthentication />
+                        <basicAuthentication />
+                        <clientCertAuthentication />
+                        <customAuthentication>
+                            <providers>
+                            </providers>
+                        </customAuthentication>
+                    </authentication>
+                </security>
+                <customFeatures>
+                    <providers>
+                    </providers>
+                </customFeatures>
+                <messages />
+                <fileHandling />
+                <firewallSupport />
+                <userIsolation>
+                    <activeDirectory />
+                </userIsolation>
+                <directoryBrowse />
+                <logFile />
+            </ftpServer>
+            <application path="/" applicationPool="WordpressAppPool">
+                <virtualDirectoryDefaults />
+                <virtualDirectory path="/" physicalPath="C:\inetpub\wwwroot\pgo\wordpress" />
+            </application>
+        </site>
+    </SITE>
+</appcmd>

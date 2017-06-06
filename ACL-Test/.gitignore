@@ -1,0 +1,6 @@
+localSettings.js
+logs
+*.diff
+*.diff.rej
+temp
+*.debug.js

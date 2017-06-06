@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appcmd>
+    <APPPOOL APPPOOL.NAME="WordpressAppPool" PipelineMode="Integrated" RuntimeVersion="" state="Started">
+        <add name="WordpressAppPool" autoStart="true" managedRuntimeVersion="">
+            <processModel idleTimeout="01:00:00" />
+            <recycling>
+                <periodicRestart>
+                    <schedule>
+                    </schedule>
+                </periodicRestart>
+            </recycling>
+            <failure />
+            <cpu />
+        </add>
+    </APPPOOL>
+</appcmd>

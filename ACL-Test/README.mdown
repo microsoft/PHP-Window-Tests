@@ -1,0 +1,26 @@
+# ACL-Test
+
+ACL-Test is a BSD-licensed automated testing framework for the Windows ACL, providing an interface to call a function in a variety of ACL contexts and return results. It is a hard fork from [Microsoft OSTC's PFTT](https://github.com/ostc/pftt).
+
+## Pre-Requisites
+
+You must have [SetACL](http://helgeklein.com/setacl/) in your `%PATH%`.
+
+## Usage
+
+ACL-Test must be setup in a clean environment and is executed in the Windows Scripting Host. Arguments passed to the command line are evaluated as JScript, so you can easily call any function or method, but the most common usage is to run the `script.js` file under the current configuration:
+
+    > acl-test
+
+## How it works
+
+The primary function to deal with is ACL.permute(), which iterates over all possible permutations of applied ACE's and runs the supplied callback function in every scenario.
+
+```javascript
+var results = ACL.permute(
+               'C:\\testdir', // base directory in which to set up filesystem objects
+               ACL.examples.is_readable, // the callback function to run
+               {}, // an arguments object to pas to your callback function
+               {reduction:REDUCE.REPEAT_INHERITED,no_set:true} // options for the permuter.
+            );
+```
