@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <title><?=$php1_name?> - <?=$php2_name?></title>
+    <style>
+      .data td { border: 1px solid black; white-space: nowrap; }
+      .iis { background-color: #E6B8B7; }
+      .iisopcache { background-color: #DA9694; }
+      .apache { background-color: #C5D9F1; }
+      .apachenoigbinary { background-color: #8DB4E2; }
+      .apachewithigbinary { background-color: #538DD5; }
+      .gainpossmall { background-color: #00A84C; }
+      .gainpos { background-color: #00D661; }
+      .gainneg { background-color: #FF2929; }
+      .gainnegsmall { background-color: #DA9694; }
+      a { font-size: 12px }
+      table { border-collapse: collapse; }
+      td { padding: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- begin <?=$php1_name?> - <?=$php2_name?> -->
+    <table class="data" style="width:100%">
+      <tbody>
+        <tr>
+          <td colspan="3"><strong><?=$php1_name?> - <?=$php2_name?></strong></td>
+          <td colspan="9" class="iis">IIS 10.0</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="2">Load Agents</td>
+          <td colspan="3" class="iis">No Cache</td>
+          <td colspan="3" class="iisopcache">Opcache</td>
+          <td colspan="3" class="apachenoigbinary ">Opcache + Wincache</td>
+        </tr>
+        <!-- Header Labels -->
+        <tr>
+          <td>Application</td>
+          <td>Physical</td>
+          <td>Virtual</td>
+          <!-- IIS No Cache -->
+          <td><?=$php1_name?></td>
+          <td><?=$php2_name?></td>
+          <td>gain</td>
+          <!-- IIS Cache -->
+          <td><?=$php1_name?></td>
+          <td><?=$php2_name?></td>
+          <td>gain</td>
+          <!-- IIS Cache -->
+          <td><?=$php1_name?></td>
+          <td><?=$php2_name?></td>
+          <td>gain</td>
+        </tr>
+        <!-- Results -->
+<?php foreach ($appresults as $appname => $results):?>
+<?php   foreach ($results as $i => $res):?>
+<?php     if ($i == 0):?>
+        <tr>
+          <td rowspan="3"><?=$appname?></td>
+          <td>2</td>
+<?php     else:?>
+        <tr>
+          <td></td>
+<?php     endif?>
+          <td><?=$res['v']?></td>
+          <td class="iis"><?=$res['php1_nocache_tps']?></td>
+          <td class="iis"><?=$res['php2_nocache_tps']?></td>
+          <td class="<?=$res['gain_nocache']['class']?>"><?=$res['gain_nocache']['value']?></td>
+          <td class="iisopcache"><?=$res['php1_opcache_tps']?></td>
+          <td class="iisopcache"><?=$res['php2_opcache_tps']?></td>
+          <td class="<?=$res['gain_opcache']['class']?>"><?=$res['gain_opcache']['value']?></td>
+          <td class="apachenoigbinary"><?=$res['php1_wincache_tps']?></td>
+          <td class="apachenoigbinary "><?=$res['php2_wincache_tps']?></td>
+          <td class="<?=$res['gain_wincache']['class']?>"><?=$res['gain_wincache']['value']?></td>
+        </tr>
+<?php   endforeach?>
+<?php endforeach?>
+        <tr>
+          <td colspan="1">Errors</td>
+          <td colspan="11">
+<?php foreach ($errors as $key => $error):?>
+            <?=$key?>: <strong><?=$error['e_count']?></strong> of <?=$error['r_count']?> requests<br/>
+<?php endforeach?>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- end <?=$php1_name?> - <?=$php2_name?> -->
+    <br/>
+    <table style="width:800px">
+      <tr>
+        <td colspan="2">Note: Error Count is count of HTTP Requests that return a status other than 200 (such as 500) during that Test Run.</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Note: for WinCache scenario, applications are configured to use the Session and Object caching features as per(all applications get the File Caching feature automatically):
+          <a href="https://wordpress.org/plugins/wincache-object-cache-backend/" target="_blank">https://wordpress.org/plugins/wincache-object-cache-backend/</a> |
+          <a href="http://www.drupalonwindows.com/en/blog/drupal-8-wincache-integration" target="_blank">http://www.drupalonwindows.com/en/blog/drupal-8-wincache-integration</a> |
+          <a href="https://www.mediawiki.org/wiki/Manual:$wgMainCacheType" target="_blank">https://www.mediawiki.org/wiki/Manual:$wgMainCacheType</a> |
+          <a href="https://www.saotn.org/8-tips-improve-joomla-performance/" target="_blank">https://www.saotn.org/8-tips-improve-joomla-performance/</a>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Web Server</strong></td>
+        <td><strong>Database Server</strong></td>
+      </tr>
+      <tr>
+        <td>IIS 10 (FastCGI SAPI)</td>
+        <td>MySQL 5.7 x64</td>
+      </tr>
+      <tr>
+        <td>1 Socket 4 Core Intel Xeon E5-2673 @ 2.40ghz</td>
+        <td>1 Socket 4 Core Intel Xeon E5-2673 @ 2.40ghz</td>
+      </tr>
+      <tr>
+        <td>SSD Storage (12800 IOPS)</td>
+        <td>SSD Storage (12800 IOPS)  - small databases, can cache all in RAM</td>
+      </tr>
+      <tr>
+        <td>8GB RAM</td>
+        <td>8GB RAM</td>
+      </tr>
+      <tr>
+        <td>Windows 2016 Datacenter</td>
+        <td>Windows 2016 Datacenter</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          Note: TCP and Ethernet interface on Web Server, Database Server and Load Agents configured for maximum connections, etc...
+          as per <a href="http://smallvoid.com/article/winnt-tcpip-max-limit.html" target="_blank">http://smallvoid.com/article/winnt-tcpip-max-limit.html</a>.
+          Persistent Database Connections are used.
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+        <a href='https://github.com/Microsoft/PHP-Window-Tests/tree/master/php-perf'>PHP-Perf Tool</a> |
+        <a href='https://github.com/Microsoft/PHP-Window-Tests/tree/master/php-perf'>PHP Configuration Files</a> |
+        <a href='https://github.com/Microsoft/PHP-Window-Tests/tree/master/php-perf'>WCAT Configuration</a>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

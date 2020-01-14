@@ -1,0 +1,61 @@
+
+scenario
+{
+    name    = "Joomla";
+
+    warmup      = 20;
+    duration    = 120;
+    cooldown    = 10;
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // All requests inherit the settings from the default request.
+    // Defaults are overridden if specified in the request itself.
+    //
+    /////////////////////////////////////////////////////////////////
+    default
+    {
+        // send keep-alive header
+        setheader
+        {
+            name    = "Connection";
+            value   = "keep-alive";
+        }
+
+        // set the host header
+        setheader
+        {
+            name    = "Host";
+            value   = server();
+        }
+
+        // HTTP1.1 request
+        version     = HTTP11;
+
+        // keep the connection alive after the request
+        close       = ka;
+    }
+
+    transaction
+    {
+        id = "Web Site Homepage";
+        weight = 1;
+
+        request
+        {
+			//url			= "/Joomla_3.7.2-Stable-Full_Package/";
+			//url			= "/Joomla_3.8.3-Stable-Full_Package/";
+			url         = "/Joomla_3.9.11-Stable-Full_Package/";
+			statuscode	= 200;
+        	//cookies	= false;
+        }
+
+        //
+        // specifically close the connection after both files are requested
+        //
+        close
+        {
+            method      = ka;
+        }
+    }
+}
