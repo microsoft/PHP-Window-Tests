@@ -1,0 +1,6 @@
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+extends:
+  template: Templates/Test-Release.yaml
+  parameters:
+    BRANCH: '7.3'
