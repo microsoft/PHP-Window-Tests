@@ -9,12 +9,12 @@ parameters:
   # OS's that we will test on
   # https://github.com/microsoft/azure-pipelines-yaml/blob/master/design/each-expression.md
   operatingSystemsCollection:
-    - key: 2k12R2
-      value: 6.3.9600
-    - key: 2k16
-      value: 10.0.14393
-    - key: 2k19
-      value: 10.0.17763
+  - key: 2k12R2
+    value: 6.3.9600
+  - key: 2k16
+    value: 10.0.14393
+  - key: 2k19
+    value: 10.0.17763
   # Azure Devops Pool to run in
   POOL: 'PHP Testing Pool'
 
