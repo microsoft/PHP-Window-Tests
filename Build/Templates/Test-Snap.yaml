@@ -1,0 +1,62 @@
+# Parameters to pass to this template
+parameters:
+  # Branch version: 7.2, 7.3, 7.4
+  BRANCH: 'INVALID_VERSION'
+  # Platforms to test
+  platforms: [x86, x64]
+  # Thread Safe and non-Thread Safe versions
+  threads: [TS, NTS]
+  # OS's that we will test on
+  # https://github.com/microsoft/azure-pipelines-yaml/blob/master/design/each-expression.md
+  operatingSystemsCollection:
+  - key: 2k12R2
+    value: 6.3.9600
+  - key: 2k16
+    value: 10.0.14393
+  - key: 2k19
+    value: 10.0.17763
+  # Azure Devops Pool to run in
+  POOL: 'PHP Testing Pool'
+
+jobs:
+- job: Job_PHP_Test_Snap_Build
+  # timeoutInMinutes help https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?tabs=yaml&view=azure-devops#timeouts
+  timeoutInMinutes: 0
+  displayName: "PHP ${{ parameters.BRANCH }} Test Snap"
+  pool:
+    name: ${{ parameters.POOL }}
+    demands:
+    - agent.osversion -equals $(OS)
+  # Loop that sets each job name and variables.
+  strategy:
+    matrix:
+      ${{ each thread in parameters.threads }}:
+        ${{ each platform in parameters.platforms }}:
+          ${{ each operatingSystem in parameters.operatingSystemsCollection }}:
+            ${{ format('{0}_{1}_{2}', thread, platform, operatingSystem.key ) }}:
+                OS: ${{ operatingSystem.value }}
+                OS_NAME: ${{ operatingSystem.key }}
+                CPU: ${{ platform }}
+                THREAD: ${{ thread }}
+  steps:
+    # Powershell Task
+  - task: PowerShell@2
+    inputs:
+      # Script Path
+      filePath: 'Scripts\test_snap.ps1'
+      # Make sure to pass branch, cpu, and thread safe version
+      arguments: '-branch ${{ parameters.BRANCH }} -cpu $(CPU) -thread $(THREAD)'
+      # Start in the sources directory
+      workingDirectory: '$(Build.SourcesDirectory)'
+    displayName: "Testing ${{ parameters.BRANCH }}-$(CPU)-$(THREAD) on $(OS_NAME)"
+
+  # Publish build artifacts to Azure Pipelines or a Windows file share
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: '$(System.JobDisplayName)'
+      publishLocation: Container # Options: container, filePath
+      #targetPath: # Required when publishLocation == FilePath
+      #parallel: false # Optional
+      #parallelCount: # Optional
+      #fileCopyOptions: #Optional

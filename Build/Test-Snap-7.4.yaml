@@ -1,0 +1,6 @@
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+jobs:
+- template: Templates/Test-Snap.yaml
+  parameters:
+    BRANCH: '7.4'
